@@ -5,6 +5,8 @@ Frontend application is built using React.
 
 Requirements:
 1. Nodejs v22.12.0
+2. Git 2.39.5
+3. npm 10.9.0
 
 Steps to run the application in local:
 1. git pull respository
