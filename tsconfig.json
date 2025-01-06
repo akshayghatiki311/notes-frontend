@@ -12,6 +12,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "allowJs": true, 
+    "checkJs": true, 
+    "jsx": "react-jsx"
   }
 }
