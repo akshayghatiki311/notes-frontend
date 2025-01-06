@@ -1,6 +1,9 @@
 import { WebSocketServer } from 'ws';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const wss = new WebSocketServer({ port: 3001 });
+const port = process.env.WEBSOCKET_PORT || 3001;
+const wss = new WebSocketServer({ port });
 const clients = new Map();
 
 wss.on('connection', (ws) => {
@@ -49,4 +52,4 @@ wss.on('connection', (ws) => {
   });
 });
 
-console.log('WebSocket server is running on ws://localhost:3001');
+console.log(`WebSocket server is running on ${process.env.WEBSOCKET_URL}`);

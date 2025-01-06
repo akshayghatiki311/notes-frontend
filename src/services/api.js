@@ -1,7 +1,9 @@
 import axios from "axios";
+import * as dotenv from 'dotenv';
+
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000', // Backend URL
+  baseURL: import.meta.env.VITE_API_URL, // Backend URL
   withCredentials: true, // Ensures cookies are sent if applicable
   headers: {
     'Content-Type': 'application/json',

@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv';
+
 class WebSocketService {
     constructor() {
       this.ws = null;
@@ -11,7 +13,7 @@ class WebSocketService {
       this.isConnecting = true;
   
       try {
-        this.ws = new WebSocket('ws://localhost:3001');
+        this.ws = new WebSocket(import.meta.env.VITE_WEBSOCKET_URL);
         
         this.ws.onopen = () => {
           console.log('WebSocket connection established');
