@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { login, register } from "../services/api";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
-import Navbar from "../components/Navbar";
+import { login, register } from "@/services/api";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Navbar from "@/components/Navbar";
 
 const Login = () => {
   const [email, setEmail] = useState("");

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import EditorForm from "../components/EditorForm";
-import { createNote, getUserEmail } from "../services/api";
+import Navbar from "@/components/Navbar";
+import EditorForm from "@/components/EditorForm";
+import { createNote, getUserEmail } from "@/services/api";
 
 export default function NewNote() {
   const [note] = useState({

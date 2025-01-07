@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import EditorForm from "../components/EditorForm";
-import { getNoteById, saveNote, createNote, getUserEmail } from "../services/api";
-import WebSocketService from "../services/websocket";
+import Navbar from "@/components/Navbar";
+import EditorForm from "@/components/EditorForm";
+import { getNoteById, saveNote, createNote, getUserEmail } from "@/services/api";
+import WebSocketService from "@/services/websocket";
 
 export default function Editor() {
   const { noteId } = useParams();

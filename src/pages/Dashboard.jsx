@@ -60,12 +60,12 @@ const Dashboard = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         userEmail={userEmail}
-      />
-      <NotesGrid 
-        notes={notes} 
-        onEdit={handleEditNote} 
-        onDelete={handleDeleteNote} 
-      />
+      />  
+        <NotesGrid 
+          notes={notes} 
+          onEdit={handleEditNote} 
+          onDelete={handleDeleteNote} 
+        />
     </div>
   );
 };

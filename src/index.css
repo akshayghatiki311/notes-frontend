@@ -48,6 +48,15 @@ body {
   padding-top: 4rem; /* Adjust padding to account for fixed navbar */
 }
 
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar + .notes-grid {
+  margin-top: 0.5rem; /* Adjust the spacing */
+}
+
 .main-content {
   flex: 1;
   display: flex;
@@ -63,6 +72,7 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+
 
 button {
   border-radius: 8px;

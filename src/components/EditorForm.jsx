@@ -68,18 +68,22 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
   };
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-4 main-content">
+      <h1 className="font-bold text-2xl">Note Editor</h1>
       <Input
+        className="w-full max-w-4xl"
         placeholder="Title"
         value={title}
         onChange={handleTitleChange}
-      />
+        />
       <Textarea
+        className="w-full max-w-4xl h-64"
         placeholder="Content"
         value={content}
         onChange={handleContentChange}
-      />
+        />
       <Input
+        className="w-full max-w-4xl"
         placeholder="Add Collaborators (comma-separated emails)"
         value={collaborators}
         onChange={(e) => setCollaborators(e.target.value)}
