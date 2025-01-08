@@ -63,7 +63,6 @@ class WebSocketService {
     }
   
     send(data) {
-      if (this.ws) {
         const message = JSON.stringify({
           type: 'update_note',
           noteId: data.noteId,
@@ -72,9 +71,6 @@ class WebSocketService {
         });
         console.log('Sending message:', message);
         this.ws.send(message);
-      } else {
-        console.warn('WebSocket is not connected. Message not sent:', data);
-      }
     }
   
     close() {
