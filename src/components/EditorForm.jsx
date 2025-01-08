@@ -21,7 +21,6 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
 
   useEffect(() => {
     if (onContentUpdate) {
-      setTitle(onContentUpdate.title);
       setContent(onContentUpdate.content);
     }
   }, [onContentUpdate]);
@@ -43,7 +42,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
     debounce((data) => {
       WebSocketService.send(data);
     }, 300),
-    [note._id]
+    []
   );
 
   const handleContentChange = (e) => {
