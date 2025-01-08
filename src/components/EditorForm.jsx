@@ -4,7 +4,7 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import WebSocketService from "../services/websocket";
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 
 export default function EditorForm({ note, onSave, onContentUpdate }) {
   const navigate = useNavigate();
@@ -21,6 +21,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
 
   useEffect(() => {
     if (onContentUpdate) {
+      setTitle(onContentUpdate.title);
       setContent(onContentUpdate.content);
     }
   }, [onContentUpdate]);
@@ -41,7 +42,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
   const debouncedSend = useCallback(
     debounce((data) => {
       WebSocketService.send(data);
-    }, 150),
+    }, 300),
     []
   );
   const handleContentChange = (e) => {
