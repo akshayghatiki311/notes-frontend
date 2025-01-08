@@ -63,7 +63,10 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
         setTitle(data.title);
       }
     });
-  }, [note._id]);
+    return () => {
+      WebSocketService.close();
+    };
+  }, [content, title]);
 
   useEffect(() => {
     WebSocketService.connect(note._id, (data) => {
@@ -72,6 +75,9 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
         setTitle(data.title);
       }
     });
+    return () => {
+      WebSocketService.close();
+    };
   });
 
   const handleTitleChange = (e) => {
