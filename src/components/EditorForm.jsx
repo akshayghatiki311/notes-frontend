@@ -4,7 +4,6 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import WebSocketService from "../services/websocket";
-import debounce from 'lodash.debounce';
 
 export default function EditorForm({ note, onSave, onContentUpdate }) {
   const navigate = useNavigate();
@@ -21,8 +20,8 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
 
   useEffect(() => {
     if (onContentUpdate) {
-      setTitle(onContentUpdate.title);
       setContent(onContentUpdate.content);
+      setTitle(onContentUpdate.title);
     }
   }, [onContentUpdate]);
 
@@ -39,12 +38,6 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
     navigate('/dashboard');
   };
 
-  const debouncedSend = useCallback(
-    debounce((data) => {
-      WebSocketService.send(data);
-    }, 300),
-    []
-  );
   const handleContentChange = (e) => {
     const newContent = e.target.value;
     setContent(newContent);
@@ -52,31 +45,18 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
       type: 'update_note',
       noteId: note._id,
       content: newContent,
-      title,
+      title
     });
   };
 
   useEffect(() => {
     WebSocketService.connect(note._id, (data) => {
       if (data.type === 'note_updated') {
-        setTitle(data.title);
-        setContent(data.content);
-      }
-    });
-
-    return () => {
-      WebSocketService.close();
-    };
-  }, [content, title]);
-
-  useEffect(() => {
-    WebSocketService.connect(note._id, (data) => {
-      if (data.type === 'note_updated') {
         setContent(data.content);
         setTitle(data.title);
       }
     });
-  },[]);
+  }, []);
 
   const handleTitleChange = (e) => {
     const newTitle = e.target.value;
@@ -85,9 +65,10 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
       type: 'update_note',
       noteId: note._id,
       content,
-      title: newTitle,
+      title: newTitle
     });
   };
+
 
   return (
     <div className="p-4 space-y-4 main-content">
