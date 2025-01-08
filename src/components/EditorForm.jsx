@@ -41,7 +41,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
   const debouncedSend = useCallback(
     debounce((data) => {
       WebSocketService.send(data);
-    }, 600),
+    }, 500),
     [note._id]
   );
 
@@ -63,9 +63,6 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
         setTitle(data.title);
       }
     });
-    return () => {
-      WebSocketService.close();
-    };
   }, [content, title]);
 
   useEffect(() => {
@@ -75,9 +72,6 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
         setTitle(data.title);
       }
     });
-    return () => {
-      WebSocketService.close();
-    };
   });
 
   const handleTitleChange = (e) => {
