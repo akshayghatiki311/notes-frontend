@@ -76,7 +76,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
         setTitle(data.title);
       }
     });
-  });
+  },[]);
 
   const handleTitleChange = (e) => {
     const newTitle = e.target.value;
