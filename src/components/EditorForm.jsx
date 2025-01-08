@@ -48,7 +48,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
   const handleContentChange = (e) => {
     const newContent = e.target.value;
     setContent(newContent);
-    debouncedSend({
+    WebSocketService.send({
       type: 'update_note',
       noteId: note._id,
       content: newContent,
@@ -81,7 +81,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
   const handleTitleChange = (e) => {
     const newTitle = e.target.value;
     setTitle(newTitle);
-    debouncedSend({
+    WebSocketService.send({
       type: 'update_note',
       noteId: note._id,
       content,
