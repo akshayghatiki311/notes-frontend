@@ -42,7 +42,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
     debounce((data) => {
       WebSocketService.send(data);
     }, 600),
-    [note._id,title]
+    [note._id]
   );
 
   const handleContentChange = (e) => {
