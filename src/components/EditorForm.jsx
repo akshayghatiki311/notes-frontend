@@ -56,6 +56,15 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
         setTitle(data.title);
       }
     });
+  }, [content, title]);
+
+  useEffect(() => {
+    WebSocketService.connect(note._id, (data) => {
+      if (data.type === 'note_updated') {
+        setContent(data.content);
+        setTitle(data.title);
+      }
+    });
   }, []);
 
   const handleTitleChange = (e) => {
