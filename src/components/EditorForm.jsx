@@ -50,10 +50,14 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
   useEffect(() => {
     WebSocketService.connect(note._id, (data) => {
       if (data.type === 'note_updated') {
-        setContent(data.content);
         setTitle(data.title);
+        setContent(data.content);
       }
     });
+
+    return () => {
+      WebSocketService.close();
+    };
   }, [content, title]);
 
   useEffect(() => {
@@ -63,7 +67,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
         setTitle(data.title);
       }
     });
-  }, []);
+  });
 
   const handleTitleChange = (e) => {
     const newTitle = e.target.value;
