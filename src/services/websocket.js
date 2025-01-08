@@ -63,7 +63,7 @@ class WebSocketService {
     }
   
     send(data) {
-      if (this.ws) {
+      if (this.ws && this.ws.readyState === WebSocket.OPEN) {
         const message = JSON.stringify({
           type: 'update_note',
           noteId: data.noteId,
