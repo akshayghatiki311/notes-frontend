@@ -9,10 +9,6 @@ class WebSocketService {
     }
   
     connect(noteId, onMessage) {
-      if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-        console.log('WebSocket is already connected');
-        return;
-      }
       if (this.isConnecting) return;
       this.isConnecting = true;
   

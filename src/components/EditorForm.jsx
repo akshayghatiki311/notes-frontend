@@ -21,7 +21,6 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
   useEffect(() => {
     if (onContentUpdate) {
       setContent(onContentUpdate.content);
-      setTitle(onContentUpdate.title);
     }
   }, [onContentUpdate]);
 
@@ -34,7 +33,6 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
   };
 
   const handleCancel = () => {
-    WebSocketService.close();
     navigate('/dashboard');
   };
 
@@ -65,9 +63,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
         setTitle(data.title);
       }
     });
-  });
-
-  
+  }, []);
 
   const handleTitleChange = (e) => {
     const newTitle = e.target.value;
@@ -79,6 +75,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
       title: newTitle
     });
   };
+
 
 
   return (
