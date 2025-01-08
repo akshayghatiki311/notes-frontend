@@ -4,7 +4,7 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import WebSocketService from "../services/websocket";
-import debounce from 'lodash/debounce';
+import debounce from 'lodash.debounce';
 
 export default function EditorForm({ note, onSave, onContentUpdate }) {
   const navigate = useNavigate();
