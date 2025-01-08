@@ -21,6 +21,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
 
   useEffect(() => {
     if (onContentUpdate) {
+      setTitle(onContentUpdate.title);
       setContent(onContentUpdate.content);
     }
   }, [onContentUpdate]);
@@ -41,7 +42,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
   const debouncedSend = useCallback(
     debounce((data) => {
       WebSocketService.send(data);
-    }, 500),
+    }, 300),
     [note._id]
   );
 
@@ -72,7 +73,7 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
         setTitle(data.title);
       }
     });
-  });
+  }, []);
 
   const handleTitleChange = (e) => {
     const newTitle = e.target.value;
