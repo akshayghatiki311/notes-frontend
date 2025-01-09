@@ -37,7 +37,7 @@ export default function EditorForm({ note, onSave }) {
       if (WebSocketService.isConnected()) {
         WebSocketService.send(data);
       }
-    }, 600),
+    }, 300),
     []
   );
 
