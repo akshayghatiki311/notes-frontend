@@ -10,6 +10,11 @@ const Dashboard = () => {
   const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
 
+  const handleUnauthorized = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
   useEffect(() => {
     fetchNotes();
   }, [activeTab]);
@@ -25,7 +30,11 @@ const Dashboard = () => {
         : await getSharedNotes();
       setNotes(data);
     } catch (error) {
-      console.error("Error fetching notes:", error);
+      if (error.response?.status === 401) {
+        handleUnauthorized();
+      } else {
+        console.error("Error fetching notes:", error);
+      }
     }
   };
 
@@ -34,7 +43,11 @@ const Dashboard = () => {
       const email = await getUserEmail();
       setUserEmail(email);
     } catch (error) {
-      console.error("Error fetching user email:", error);
+      if (error.response?.status === 401) {
+        handleUnauthorized();
+      } else {
+        console.error("Error fetching user email:", error);
+      }
     }
   };
 
@@ -48,8 +61,12 @@ const Dashboard = () => {
       await fetchNotes();
       alert("Note deleted successfully!");
     } catch (error) {
-      console.error("Error deleting note:", error);
-      alert("Failed to delete the note.");
+      if (error.response?.status === 401) {
+        handleUnauthorized();
+      } else {
+        console.error("Error deleting note:", error);
+        alert("Failed to delete the note.");
+      }
     }
   };
 
