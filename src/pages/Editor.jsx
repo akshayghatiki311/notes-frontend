@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import EditorForm from "@/components/EditorForm";
 import { getNoteById, saveNote, createNote, getUserEmail } from "@/services/api";
-import WebSocketService from "@/services/websocket";
 
 export default function Editor() {
   const { noteId } = useParams();
@@ -13,7 +12,6 @@ export default function Editor() {
     owner: '',
     collaborators: []
   } : null);
-  const [realTimeUpdate, setRealTimeUpdate] = useState(null);
   const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
 
@@ -24,20 +22,6 @@ export default function Editor() {
           const data = await getNoteById(noteId);
           if (data) {
             setNote(data);
-            WebSocketService.connect(noteId, (event) => {
-              try {
-                if (event.data) {
-                  const parsedData = JSON.parse(event.data);
-                  if (parsedData.type === 'note_updated') {
-                    setRealTimeUpdate(parsedData);
-                  }
-                } else {
-                  console.warn('Received empty message');
-                }
-              } catch (error) {
-                console.error('Error processing message:', error);
-              }
-            });
           }
         } catch (error) {
           console.error("Error fetching note:", error);
@@ -45,10 +29,6 @@ export default function Editor() {
         }
       };
       fetchNote();
-
-      return () => {
-        WebSocketService.close();
-      };
     }
   }, [noteId, navigate]);
 
@@ -75,12 +55,6 @@ export default function Editor() {
           ...updatedNote,
           id: note._id,
         });
-        WebSocketService.send({
-          type: 'update_note',
-          noteId: savedNote._id,
-          content: savedNote.content,
-          title: savedNote.title
-        });
       }
       setNote(savedNote);
       alert("Note saved successfully!");
@@ -90,6 +64,7 @@ export default function Editor() {
       alert("Failed to save the note.");
     }
   };
+
 
   if (!note && noteId !== 'new') {
     return <div>Loading...</div>;
@@ -102,7 +77,6 @@ export default function Editor() {
         <EditorForm 
           note={note || { title: '', content: '', owner: '', collaborators: [] }} 
           onSave={handleSave} 
-          onContentUpdate={realTimeUpdate}
         />
       </div>
     </>

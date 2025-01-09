@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import WebSocketService from "../services/websocket";
 import debounce from 'lodash.debounce';
 
-export default function EditorForm({ note, onSave, onContentUpdate }) {
+export default function EditorForm({ note, onSave }) {
   const navigate = useNavigate();
   const [title, setTitle] = useState(note.title || "");
   const [content, setContent] = useState(note.content || "");
@@ -20,69 +20,64 @@ export default function EditorForm({ note, onSave, onContentUpdate }) {
   }, [note]);
 
   useEffect(() => {
-    if (onContentUpdate) {
-      setContent(onContentUpdate.content);
-    }
-  }, [onContentUpdate]);
-
-  const handleSave = () => {
-    onSave({ 
-      title, 
-      content,
-      collaborators
+    WebSocketService.connect(note._id, (data) => {
+      if (data.type === 'note_updated') {
+        setTitle(data.title);
+        setContent(data.content);
+      }
     });
-  };
 
-  const handleCancel = () => {
-    WebSocketService.close();
-    navigate('/dashboard');
-  };
+    return () => {
+      WebSocketService.close();
+    };
+  }, [note._id]);
 
   const debouncedSend = useCallback(
     debounce((data) => {
-      WebSocketService.send(data);
-    }, 300),
+      if (WebSocketService.isConnected()) {
+        WebSocketService.send(data);
+      }
+    }, 600),
     []
   );
 
   const handleContentChange = (e) => {
     const newContent = e.target.value;
     setContent(newContent);
-    debouncedSend({
-      type: 'update_note',
-      noteId: note._id,
-      content: newContent,
-      title,
-    });
+    if (note._id) {
+      debouncedSend({
+        type: 'update_note',
+        noteId: note._id,
+        content: newContent,
+        title,
+      });
+    }
   };
-
-  useEffect(() => {
-    WebSocketService.connect(note._id, (data) => {
-      if (data.type === 'note_updated') {
-        setContent(data.content);
-        setTitle(data.title);
-      }
-    });
-  }, [content, title]);
-
-  useEffect(() => {
-    WebSocketService.connect(note._id, (data) => {
-      if (data.type === 'note_updated') {
-        setContent(data.content);
-        setTitle(data.title);
-      }
-    });
-  }, []);
 
   const handleTitleChange = (e) => {
     const newTitle = e.target.value;
     setTitle(newTitle);
-    debouncedSend({
-      type: 'update_note',
-      noteId: note._id,
+    if (note._id) {
+      debouncedSend({
+        type: 'update_note',
+        noteId: note._id,
+        content,
+        title: newTitle,
+      });
+    }
+  };
+
+  const handleSave = () => {
+    onSave({ 
+      title, 
       content,
-      title: newTitle,
+      collaborators: collaborators.split(',').map(email => email.trim()).filter(Boolean)
     });
+  };
+
+  const handleCancel = () => {
+    WebSocketService.close();
+    navigate('/dashboard');
   };
 
 
