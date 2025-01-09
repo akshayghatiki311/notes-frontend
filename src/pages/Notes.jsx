@@ -8,10 +8,28 @@ const Notes = () => {
   const [notes, setNotes] = useState([]);
   const navigate = useNavigate();
 
+  const handleUnauthorized = () => {
+    try {
+      localStorage.clear(); 
+      navigate("/");
+    } catch (error) {
+      console.error("Error during logout:", error);
+      navigate("/");
+    }
+  };
+
   useEffect(() => {
     const fetchNotes = async () => {
-      const data = await getNotes();
-      setNotes(data);
+      try {
+        const data = await getNotes();
+        setNotes(data);
+      } catch (error) {
+        if (error.response?.status === 401) {
+          handleUnauthorized();
+        } else {
+          console.error("Error fetching notes:", error);
+        }
+      }
     };
     fetchNotes();
   }, []);
@@ -33,7 +51,7 @@ const Notes = () => {
 
   return (
     <div>
-      <Navbar onLogout={() => navigate("/")} />
+      <Navbar onLogout={() => handleUnauthorized()} />
       <NotesGrid notes={notes} onEdit={handleEditNote} onDelete={handleDeleteNote} />
     </div>
   );

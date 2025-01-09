@@ -14,6 +14,16 @@ export default function NewNote() {
   const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
 
+  const handleUnauthorized = () => {
+    try {
+      localStorage.clear(); 
+      navigate("/");
+    } catch (error) {
+      console.error("Error during logout:", error);
+      navigate("/");
+    }
+  };
+  
   useEffect(() => {
     fetchUserEmail();
   }, []);
@@ -23,7 +33,11 @@ export default function NewNote() {
       const email = await getUserEmail();
       setUserEmail(email);
     } catch (error) {
-      console.error("Error fetching user email:", error);
+      if (error.response?.status === 401) {
+        handleUnauthorized();
+      } else {
+        console.error("Error fetching user email:", error);
+      }
     }
   };
 
@@ -33,14 +47,17 @@ export default function NewNote() {
       alert("Note created successfully!");
       navigate("/dashboard");
     } catch (error) {
-      console.error("Error creating note:", error);
-      alert("Failed to create the note.");
+      if (error.response?.status === 401) {
+        handleUnauthorized();
+      } else {
+        console.error("Error fetching user email:", error);
+      }
     }
   };
 
   return (
     <>
-      <Navbar onLogout={() => window.location.href = "/"} userEmail={userEmail} />
+      <Navbar onLogout={() => handleUnauthorized()} userEmail={userEmail} />
       <div className="main-content">
         <EditorForm 
           note={note} 

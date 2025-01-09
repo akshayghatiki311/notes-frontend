@@ -10,9 +10,19 @@ const Dashboard = () => {
   const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
 
-  const handleUnauthorized = () => {
-    localStorage.removeItem("token");
-    navigate("/");
+  const handleUnauthorized = async () => {
+    try {
+      console.log(localStorage);
+      await localStorage.clear();
+      if (localStorage.length !== 0) {
+        console.error("Error clearing local storage");
+      }
+      console.log(localStorage);
+      navigate("/");
+    } catch (error) {
+      console.error("Error during logout:", error);
+      navigate("/");
+    }
   };
 
   useEffect(() => {
@@ -73,7 +83,7 @@ const Dashboard = () => {
   return (
     <div>
       <Navbar 
-        onLogout={() => navigate("/")} 
+        onLogout={() => handleUnauthorized()} 
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         userEmail={userEmail}

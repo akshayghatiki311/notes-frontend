@@ -15,6 +15,16 @@ export default function Editor() {
   const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
 
+  const handleUnauthorized = () => {
+    try {
+      localStorage.clear(); 
+      navigate("/");
+    } catch (error) {
+      console.error("Error during logout:", error);
+      navigate("/");
+    }
+  };
+
   useEffect(() => {
     if (noteId && noteId !== 'new') {
       const fetchNote = async () => {
@@ -24,8 +34,12 @@ export default function Editor() {
             setNote(data);
           }
         } catch (error) {
-          console.error("Error fetching note:", error);
-          navigate('/dashboard');
+          if (error.response?.status === 401) {
+            handleUnauthorized();
+          } else {
+            console.error("Error fetching note:", error);
+            navigate('/dashboard');
+          }
         }
       };
       fetchNote();
@@ -41,7 +55,11 @@ export default function Editor() {
       const email = await getUserEmail();
       setUserEmail(email);
     } catch (error) {
-      console.error("Error fetching user email:", error);
+      if (error.response?.status === 401) {
+        handleUnauthorized();
+      } else {
+        console.error("Error fetching user email:", error);
+      }
     }
   };
 
@@ -60,8 +78,12 @@ export default function Editor() {
       alert("Note saved successfully!");
       navigate("/dashboard");
     } catch (error) {
-      console.error("Error saving note:", error);
-      alert("Failed to save the note.");
+      if (error.response?.status === 401) {
+        handleUnauthorized();
+      } else {
+        console.error("Error saving note:", error);
+        alert("Failed to save the note.");
+      }
     }
   };
 
@@ -72,7 +94,7 @@ export default function Editor() {
 
   return (
     <>
-      <Navbar onLogout={() => window.location.href = "/"} userEmail={userEmail} />
+      <Navbar onLogout={() => handleUnauthorized()} userEmail={userEmail} />
       <div className="main-content">
         <EditorForm 
           note={note || { title: '', content: '', owner: '', collaborators: [] }} 
