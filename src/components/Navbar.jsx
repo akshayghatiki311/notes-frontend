@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from 'lucide-react';
 
 export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = true, userEmail }) {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleCreateNote = () => {
     navigate('/create/new');
@@ -13,6 +21,7 @@ export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = t
     if (typeof setActiveTab === 'function') {
       setActiveTab(tab);
     }
+    setIsOpen(false);
     navigate('/dashboard');
   };
 
@@ -25,7 +34,7 @@ export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = t
 
   return (
     <nav className="p-4 bg-white shadow fixed top-0 left-0 right-0 z-10">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <h1 
             className="text-xl font-bold cursor-pointer" 
@@ -34,28 +43,26 @@ export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = t
             ScribbleSync
           </h1>
           {showTabs && (
-            <div className="flex space-x-4">
-              <span
-                className={`cursor-pointer py-3 px-6 font-medium transition-all duration-200 hover:bg-gray-50 
-                  ${activeTab === 'my-notes' 
-                    ? 'border-b-2 border-blue-500 text-blue-600 bg-blue-50' 
-                    : 'text-gray-500 hover:text-blue-500'
-                  }`}
-                onClick={() => handleTabClick('my-notes')}
-              >
-                My Notes
-              </span>
-              <span
-                className={`cursor-pointer py-3 px-6 font-medium transition-all duration-200 hover:bg-gray-50
-                  ${activeTab === 'shared-notes' 
-                    ? 'border-b-2 border-blue-500 text-blue-600 bg-blue-50' 
-                    : 'text-gray-500 hover:text-blue-500'
-                  }`}
-                onClick={() => handleTabClick('shared-notes')}
-              >
-                Shared Notes
-              </span>
-            </div>
+            <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+              <DropdownMenuTrigger className="flex items-center space-x-1 px-4 py-2 text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-md">
+                <span>Notes</span>
+                <ChevronDown className="h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-gray-50 border border-gray-200">
+                <DropdownMenuItem 
+                  onClick={() => handleTabClick('my-notes')}
+                  className={`${activeTab === 'my-notes' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+                >
+                  My Notes
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => handleTabClick('shared-notes')}
+                  className={`${activeTab === 'shared-notes' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+                >
+                  Shared Notes
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
         </div>
         <div className="flex items-center space-x-4">

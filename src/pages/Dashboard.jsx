@@ -114,11 +114,16 @@ const Dashboard = () => {
           setActiveTab={setActiveTab}
           userEmail={userEmail}
         />  
-        <NotesGrid 
-          notes={notes} 
-          onEdit={handleEditNote} 
-          onDelete={handleDeleteNote} 
-        />
+        <div className="pt-20 px-6 max-w-[1280px] mx-auto">
+          <h2 className="text-2xl font-semibold text-gray-700 mb-6">
+            {activeTab === 'my-notes' ? 'My Notes' : 'Shared Notes'}
+          </h2>
+          <NotesGrid 
+            notes={notes} 
+            onEdit={handleEditNote} 
+            onDelete={handleDeleteNote} 
+          />
+        </div>
         {toast.open && (
           <Toast 
             variant={toast.variant}
