@@ -3,11 +3,24 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import NotesGrid from "../components/NotesGrid";
 import { getNotes, getSharedNotes, deleteNote, getUserEmail } from "../services/api";
+import { 
+  Toast, 
+  ToastProvider, 
+  ToastViewport, 
+  ToastTitle, 
+  ToastDescription 
+} from "@/components/ui/toast";
 
 const Dashboard = () => {
   const [notes, setNotes] = useState([]);
   const [activeTab, setActiveTab] = useState('my-notes');
   const [userEmail, setUserEmail] = useState('');
+  const [toast, setToast] = useState({
+    open: false,
+    title: '',
+    description: '',
+    variant: 'default'
+  });
   const navigate = useNavigate();
 
   const handleUnauthorized = async () => {
@@ -65,35 +78,61 @@ const Dashboard = () => {
     navigate(`/editor/${noteId}`);
   };
 
+  const showToast = (title, description, variant = 'default') => {
+    setToast({
+      open: true,
+      title,
+      description,
+      variant
+    });
+    setTimeout(() => {
+      setToast(prev => ({ ...prev, open: false }));
+    }, 3000);
+  };
+
   const handleDeleteNote = async (noteId) => {
     try {
       await deleteNote(noteId);
       await fetchNotes();
-      alert("Note deleted successfully!");
+      showToast('Success', 'Note deleted successfully!');
     } catch (error) {
       if (error.response?.status === 401) {
         handleUnauthorized();
       } else {
         console.error("Error deleting note:", error);
-        alert("Failed to delete the note.");
+        showToast('Error', 'Failed to delete note', 'destructive');
       }
     }
   };
 
   return (
-    <div>
-      <Navbar 
-        onLogout={() => handleUnauthorized()} 
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        userEmail={userEmail}
-      />  
+    <ToastProvider>
+      <div>
+        <Navbar 
+          onLogout={() => handleUnauthorized()} 
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          userEmail={userEmail}
+        />  
         <NotesGrid 
           notes={notes} 
           onEdit={handleEditNote} 
           onDelete={handleDeleteNote} 
         />
-    </div>
+        {toast.open && (
+          <Toast 
+            variant={toast.variant}
+            className="fixed bottom-4 left-1/2 transform -translate-x-1/2"
+          >
+            <ToastTitle>{toast.title}</ToastTitle>
+            <ToastDescription>{toast.description}</ToastDescription>
+          </Toast>
+        )}
+        <ToastViewport 
+          className="fixed bottom-0 left-1/2 transform -translate-x-1/2 flex flex-col p-4 gap-2 w-[400px] m-0 list-none z-[100] outline-none"
+        />
+      </div>
+    </ToastProvider>
   );
 };
 

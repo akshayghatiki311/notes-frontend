@@ -4,15 +4,40 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import WebSocketService from "../services/websocket";
+import {
+  Toast,
+  ToastProvider,
+  ToastViewport,
+  ToastTitle,
+  ToastDescription,
+} from "@/components/ui/toast";
 
 export default function EditorForm({ note, userEmail, onSave }) {
   const navigate = useNavigate();
   const [title, setTitle] = useState(note.title || "");
   const [content, setContent] = useState(note.content || "");
   const [activeEditor, setActiveEditor] = useState(null);
+  const [toast, setToast] = useState({
+    open: false,
+    title: '',
+    description: '',
+    variant: 'default'
+  });
   const [collaborators, setCollaborators] = useState(
     Array.isArray(note.collaborators) ? note.collaborators.join(", ") : ""
   );
+
+  const showToast = (title, description, variant = 'default') => {
+    setToast({
+      open: true,
+      title,
+      description,
+      variant
+    });
+    setTimeout(() => {
+      setToast(prev => ({ ...prev, open: false }));
+    }, 3000);
+  };
 
   useEffect(() => {
     setTitle(note.title || "");
@@ -30,13 +55,15 @@ export default function EditorForm({ note, userEmail, onSave }) {
         if (data.email && data.email !== userEmail) {
           console.log('Setting active editor:', data.email);
           setActiveEditor(data.email);
+          showToast(
+            'Collaborative Editing',
+            `${data.email} is editing the note...`
+          );
           
-          // Clear any existing timeout
           if (timeoutId) {
             clearTimeout(timeoutId);
           }
           
-          // Set new timeout
           timeoutId = setTimeout(() => {
             setActiveEditor(null);
           }, 2000);
@@ -86,6 +113,10 @@ export default function EditorForm({ note, userEmail, onSave }) {
       content,
       collaborators: collaborators.split(',').map(email => email.trim()).filter(Boolean)
     });
+    showToast(
+      'Success',
+      note._id ? 'Note saved successfully!' : 'New note created successfully!'
+    );
   };
 
   const handleCancel = () => {
@@ -94,36 +125,51 @@ export default function EditorForm({ note, userEmail, onSave }) {
   };
 
   return (
-    <div className="p-4 space-y-4 main-content">
-      <h1 className="font-bold text-2xl">Note Editor</h1>
-      {activeEditor && activeEditor !== userEmail && (
-        <div className="text-sm bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-2 rounded-md flex items-center">
-          <div className="animate-pulse mr-2">●</div>
-          <span>{activeEditor} is currently editing this note...</span>
+    <ToastProvider>
+      <div className="p-4 space-y-4 main-content">
+        <h1 className="font-bold text-2xl">Note Editor</h1>
+        {activeEditor && activeEditor !== userEmail && (
+          <div className="text-sm bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-2 rounded-md flex items-center">
+            <div className="animate-pulse mr-2">●</div>
+            <span>{activeEditor} is currently editing this note...</span>
+          </div>
+        )}
+        <Input
+          className="w-full max-w-4xl"
+          placeholder="Title"
+          value={title}
+          onChange={handleTitleChange}
+        />
+        <Textarea
+          className="w-full max-w-4xl h-64"
+          placeholder="Content"
+          value={content}
+          onChange={handleContentChange}
+        />
+        <Input
+          className="w-full max-w-4xl"
+          placeholder="Add Collaborators (comma-separated emails)"
+          value={collaborators}
+          onChange={(e) => setCollaborators(e.target.value)}
+        />
+        <div className="flex space-x-2">
+          <Button onClick={handleSave}>Save</Button>
+          <Button variant="secondary" onClick={handleCancel}>Cancel</Button>
         </div>
-      )}
-      <Input
-        className="w-full max-w-4xl"
-        placeholder="Title"
-        value={title}
-        onChange={handleTitleChange}
+
+        {toast.open && (
+          <Toast 
+            variant={toast.variant}
+            className="fixed bottom-4 left-1/2 transform -translate-x-1/2"
+          >
+            <ToastTitle>{toast.title}</ToastTitle>
+            <ToastDescription>{toast.description}</ToastDescription>
+          </Toast>
+        )}
+        <ToastViewport 
+          className="fixed bottom-0 left-1/2 transform -translate-x-1/2 flex flex-col p-4 gap-2 w-[400px] m-0 list-none z-[100] outline-none"
         />
-      <Textarea
-        className="w-full max-w-4xl h-64"
-        placeholder="Content"
-        value={content}
-        onChange={handleContentChange}
-        />
-      <Input
-        className="w-full max-w-4xl"
-        placeholder="Add Collaborators (comma-separated emails)"
-        value={collaborators}
-        onChange={(e) => setCollaborators(e.target.value)}
-      />
-      <div className="flex space-x-2">
-        <Button onClick={handleSave}>Save</Button>
-        <Button variant="secondary" onClick={handleCancel}>Cancel</Button>
       </div>
-    </div>
+    </ToastProvider>
   );
 }
