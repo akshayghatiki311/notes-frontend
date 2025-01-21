@@ -115,7 +115,7 @@ const Dashboard = () => {
           userEmail={userEmail}
         />  
         <div className="pt-20 px-6 max-w-[1280px] mx-auto">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-6">
+          <h2 className="text-3xl font-bold mb-8">
             {activeTab === 'my-notes' ? 'My Notes' : 'Shared Notes'}
           </h2>
           <NotesGrid 

@@ -4,6 +4,7 @@ import Notes from "@/pages/Notes";
 import Editor from '@/pages/Editor';
 import Dashboard from '@/pages/Dashboard';
 import NewNote from '@/pages/NewNote';
+import About from '@/pages/About';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/create/new" element={<NewNote />} />
         <Route path="/editor/:noteId" element={<Editor />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </Router>
   );

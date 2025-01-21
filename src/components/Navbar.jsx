@@ -32,6 +32,10 @@ export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = t
     navigate('/dashboard');
   };
 
+  const handleAboutClick = () => {
+    navigate('/about');
+  };
+
   return (
     <nav className="p-4 bg-white shadow fixed top-0 left-0 right-0 z-10">
       <div className="flex justify-between items-center">
@@ -64,6 +68,12 @@ export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = t
               </DropdownMenuContent>
             </DropdownMenu>
           )}
+          <button
+            onClick={handleAboutClick}
+            className="px-4 py-2 text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
+          >
+            About
+          </button>
         </div>
         <div className="flex items-center space-x-4">
           {userEmail && <span className="text-gray-500">{userEmail}</span>}

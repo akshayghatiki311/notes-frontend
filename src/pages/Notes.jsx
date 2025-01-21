@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import NotesGrid from "@/components/NotesGrid";
-import { getNotes,  } from "@/services/api";
+import { getNotes, deleteNote } from "@/services/api";
 
 const Notes = () => {
   const [notes, setNotes] = useState([]);
