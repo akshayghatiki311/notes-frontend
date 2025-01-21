@@ -5,10 +5,11 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import WebSocketService from "../services/websocket";
 
-export default function EditorForm({ note, onSave }) {
+export default function EditorForm({ note, userEmail, onSave }) {
   const navigate = useNavigate();
   const [title, setTitle] = useState(note.title || "");
   const [content, setContent] = useState(note.content || "");
+  const [activeEditor, setActiveEditor] = useState(null);
   const [collaborators, setCollaborators] = useState(
     Array.isArray(note.collaborators) ? note.collaborators.join(", ") : ""
   );
@@ -19,18 +20,37 @@ export default function EditorForm({ note, onSave }) {
   }, [note]);
 
   useEffect(() => {
+    let timeoutId;
+    
     WebSocketService.connect(note._id, (data) => {
+      console.log('Received WebSocket data:', data);
       if (data.type === 'note_updated') {
         setTitle(data.title);
         setContent(data.content);
+        if (data.email && data.email !== userEmail) {
+          console.log('Setting active editor:', data.email);
+          setActiveEditor(data.email);
+          
+          // Clear any existing timeout
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
+          
+          // Set new timeout
+          timeoutId = setTimeout(() => {
+            setActiveEditor(null);
+          }, 2000);
+        }
       }
     });
 
     return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
       WebSocketService.close();
     };
-  }, [note._id]);
-
+  }, [note._id, userEmail]);
 
   const handleContentChange = (e) => {
     const newContent = e.target.value;
@@ -41,6 +61,7 @@ export default function EditorForm({ note, onSave }) {
         noteId: note._id,
         content: newContent,
         title,
+        email: userEmail
       });
     }
   };
@@ -54,6 +75,7 @@ export default function EditorForm({ note, onSave }) {
         noteId: note._id,
         content,
         title: newTitle,
+        email: userEmail
       });
     }
   };
@@ -71,11 +93,15 @@ export default function EditorForm({ note, onSave }) {
     navigate('/dashboard');
   };
 
-
-
   return (
     <div className="p-4 space-y-4 main-content">
       <h1 className="font-bold text-2xl">Note Editor</h1>
+      {activeEditor && activeEditor !== userEmail && (
+        <div className="text-sm bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-2 rounded-md flex items-center">
+          <div className="animate-pulse mr-2">●</div>
+          <span>{activeEditor} is currently editing this note...</span>
+        </div>
+      )}
       <Input
         className="w-full max-w-4xl"
         placeholder="Title"

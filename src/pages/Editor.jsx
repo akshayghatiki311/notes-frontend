@@ -97,7 +97,8 @@ export default function Editor() {
       <Navbar onLogout={() => handleUnauthorized()} userEmail={userEmail} />
       <div className="main-content">
         <EditorForm 
-          note={note || { title: '', content: '', owner: '', collaborators: [] }} 
+          note={note || { title: '', content: '', owner: '', collaborators: [] }}
+          userEmail={userEmail} 
           onSave={handleSave} 
         />
       </div>

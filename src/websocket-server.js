@@ -40,9 +40,10 @@ io.on('connection', (socket) => {
             type: 'note_updated',
             noteId: data.noteId,
             content: data.content,
-            title: data.title
+            title: data.title,
+            email: data.email  // Add email
           };
-          console.log('Sending update message:', updateMessage);
+          console.log('Sending update message to client:', updateMessage);
           client.emit('note_updated', updateMessage);
         }
       }

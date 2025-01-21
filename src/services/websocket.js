@@ -50,9 +50,10 @@ class WebSocketService {
         type: 'update_note',
         noteId: data.noteId,
         content: data.content,
-        title: data.title
+        title: data.title,
+        email: data.email  // Add email
       };
-      console.log('Sending message:', message);
+      console.log('Sending WebSocket message:', message);
       this.socket.emit('update_note', message);
     } else {
       console.warn('Socket.IO is not connected. Message not sent:', data);
