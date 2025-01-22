@@ -4,3 +4,4 @@ declare module '@/pages/Editor';
 declare module '@/pages/Dashboard';
 declare module '@/pages/NewNote';
 declare module '@/pages/About';
+declare module '@/pages/Portfolio';

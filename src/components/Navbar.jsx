@@ -36,6 +36,10 @@ export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = t
     navigate('/about');
   };
 
+  const handlePortfolioClick = () => {
+    navigate('/portfolio');
+  };
+
   return (
     <nav className="p-4 bg-white shadow fixed top-0 left-0 right-0 z-10">
       <div className="flex justify-between items-center">
@@ -73,6 +77,12 @@ export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = t
             className="px-4 py-2 text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
           >
             About
+          </button>
+          <button
+            onClick={handlePortfolioClick}
+            className="px-4 py-2 text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
+          >
+            Portfolio
           </button>
         </div>
         <div className="flex items-center space-x-4">

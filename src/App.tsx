@@ -5,7 +5,7 @@ import Editor from '@/pages/Editor';
 import Dashboard from '@/pages/Dashboard';
 import NewNote from '@/pages/NewNote';
 import About from '@/pages/About';
-
+import Portfolio from '@/pages/Portfolio';
 function App() {
   return (
     <Router>
@@ -16,6 +16,7 @@ function App() {
         <Route path="/editor/:noteId" element={<Editor />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/about" element={<About />} />
+        <Route path="/portfolio" element={<Portfolio />} />
       </Routes>
     </Router>
   );
