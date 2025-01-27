@@ -6,6 +6,7 @@ import Dashboard from '@/pages/Dashboard';
 import NewNote from '@/pages/NewNote';
 import About from '@/pages/About';
 import Portfolio from '@/pages/Portfolio';
+import TextAlter from '@/pages/TextAlter';
 function App() {
   return (
     <Router>
@@ -17,6 +18,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/text-alter" element={<TextAlter />} />
       </Routes>
     </Router>
   );

@@ -15,7 +15,7 @@ const Portfolio = () => {
       title: "Employee Engagement Platform",
       description: "A comprehensive platform for organizations to manage employee engagement, feedback, and performance tracking.",
       image: "/employee-platform.png",
-      tech: ["Python", "Flask", "MySQL", "React", "Docker"],
+      tech: ["Nodejs", "Nestjs", "Microservices", "Python", "Flask", "MySQL", "Docker", "Kubernetes", "AWS", "MongoDB", "WebSockets", "gRPC"],
       link: "#"
     }
   ];
