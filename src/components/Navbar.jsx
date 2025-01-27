@@ -13,10 +13,6 @@ export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = t
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleCreateNote = () => {
-    navigate('/create/new');
-  };
-
   const handleTabClick = (tab) => {
     if (typeof setActiveTab === 'function') {
       setActiveTab(tab);
@@ -99,10 +95,7 @@ export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = t
           {userEmail && (
             <>
               <span className="text-gray-500">{userEmail}</span>
-              <div className="flex space-x-2">
-                <Button onClick={handleCreateNote}>+ Create Note</Button>
-                <Button onClick={onLogout}>Logout</Button>
-              </div>
+              <Button onClick={onLogout}>Logout</Button>
             </>
           )}
         </div>

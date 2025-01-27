@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import NotesGrid from "../components/NotesGrid";
 import { getNotes, getSharedNotes, deleteNote, getUserEmail } from "../services/api";
+import { Button } from "@/components/ui/button";
+import { Plus } from 'lucide-react';
 import { 
   Toast, 
   ToastProvider, 
@@ -107,23 +109,60 @@ const Dashboard = () => {
 
   return (
     <ToastProvider>
-      <div>
+      <div className="min-h-screen bg-gray-50">
         <Navbar 
           onLogout={() => handleUnauthorized()} 
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           userEmail={userEmail}
-        />  
+        />
         <div className="pt-20 px-6 max-w-[1280px] mx-auto">
-          <h2 className="text-3xl font-bold mb-8">
-            {activeTab === 'my-notes' ? 'My Notes' : 'Shared Notes'}
-          </h2>
-          <NotesGrid 
-            notes={notes} 
-            onEdit={handleEditNote} 
-            onDelete={handleDeleteNote} 
-          />
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-800">
+              {activeTab === 'my-notes' ? 'My Notes' : 'Shared Notes'}
+            </h1>
+            {activeTab === 'my-notes' && (
+              <Button 
+                onClick={() => navigate('/create/new')}
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+              >
+                <Plus className="w-4 h-4" />
+                Create Note
+              </Button>
+            )}
+          </div>
+
+          {notes.length === 0 ? (
+            <div className="bg-white rounded-lg shadow-md p-8 text-center">
+              <h2 className="text-xl text-gray-600 mb-4">
+                {activeTab === 'my-notes' ? 'No notes yet' : 'No shared notes'}
+              </h2>
+              <p className="text-gray-500 mb-6">
+                {activeTab === 'my-notes' 
+                  ? 'Create your first note to get started!' 
+                  : 'Notes shared with you will appear here'}
+              </p>
+              {activeTab === 'my-notes' && (
+                <Button 
+                  onClick={() => navigate('/create/new')}
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 mx-auto"
+                >
+                  <Plus className="w-4 h-4" />
+                  Create Note
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div>
+              <NotesGrid 
+                notes={notes} 
+                onEdit={handleEditNote} 
+                onDelete={handleDeleteNote} 
+              />
+            </div>
+          )}
         </div>
+
         {toast.open && (
           <Toast 
             variant={toast.variant}
