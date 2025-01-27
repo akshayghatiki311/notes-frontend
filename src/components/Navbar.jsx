@@ -40,6 +40,10 @@ export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = t
     navigate('/portfolio');
   };
 
+  const handleTextAlterClick = () => {
+    navigate('/text-alter');
+  };
+
   return (
     <nav className="p-4 bg-white shadow fixed top-0 left-0 right-0 z-10">
       <div className="flex justify-between items-center">
@@ -50,7 +54,7 @@ export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = t
           >
             ScribbleSync
           </h1>
-          {showTabs && (
+          {userEmail && (
             <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
               <DropdownMenuTrigger className="flex items-center space-x-1 px-4 py-2 text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-md">
                 <span>Notes</span>
@@ -74,24 +78,32 @@ export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = t
           )}
           <button
             onClick={handleAboutClick}
-            className="px-4 py-2 text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
+            className="px-4 py-2 text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors rounded-md"
           >
             About
           </button>
           <button
             onClick={handlePortfolioClick}
-            className="px-4 py-2 text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
+            className="px-4 py-2 text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors rounded-md"
           >
             Portfolio
           </button>
+          <button
+            onClick={handleTextAlterClick}
+            className="px-4 py-2 text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors rounded-md"
+          >
+            TextAlter
+          </button>
         </div>
         <div className="flex items-center space-x-4">
-          {userEmail && <span className="text-gray-500">{userEmail}</span>}
-          {showTabs && (
-            <div className="flex space-x-2">
-              <Button onClick={handleCreateNote}>+ Create Note</Button>
-              <Button onClick={onLogout}>Logout</Button>
-            </div>
+          {userEmail && (
+            <>
+              <span className="text-gray-500">{userEmail}</span>
+              <div className="flex space-x-2">
+                <Button onClick={handleCreateNote}>+ Create Note</Button>
+                <Button onClick={onLogout}>Logout</Button>
+              </div>
+            </>
           )}
         </div>
       </div>

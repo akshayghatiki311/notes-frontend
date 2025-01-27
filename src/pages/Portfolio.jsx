@@ -22,7 +22,7 @@ const Portfolio = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar showTabs={false} userEmail={null} />
+      <Navbar showTabs={true} />
       <div className="pt-20 px-6 max-w-[1280px] mx-auto">
         {/* Hero Section */}
         <div className="bg-white rounded-lg shadow-md p-8 mb-8">
