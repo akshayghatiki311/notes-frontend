@@ -6,3 +6,4 @@ declare module '@/pages/NewNote';
 declare module '@/pages/About';
 declare module '@/pages/Portfolio';
 declare module '@/pages/TextAlter';
+declare module '@/pages/IngredientScanner';

@@ -90,6 +90,12 @@ export default function Navbar({ onLogout, activeTab, setActiveTab, showTabs = t
           >
             TextAlter
           </button>
+          <button
+            onClick={() => navigate('/scan-ingredients')}
+            className="px-4 py-2 text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors rounded-md"
+          >
+            Scan Ingredients
+          </button>
         </div>
         <div className="flex items-center space-x-4">
           {userEmail && (

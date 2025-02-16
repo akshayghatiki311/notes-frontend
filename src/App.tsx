@@ -7,6 +7,8 @@ import NewNote from '@/pages/NewNote';
 import About from '@/pages/About';
 import Portfolio from '@/pages/Portfolio';
 import TextAlter from '@/pages/TextAlter';
+import IngredientScanner from '@/pages/IngredientScanner';
+
 function App() {
   return (
     <Router>
@@ -19,6 +21,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/text-alter" element={<TextAlter />} />
+        <Route path="/scan-ingredients" element={<IngredientScanner />} />
       </Routes>
     </Router>
   );
